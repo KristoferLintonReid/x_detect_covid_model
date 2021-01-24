@@ -41,8 +41,8 @@ reconstructed_model = keras.models.load_model('./model/keras_model')
 RF_list = []
 def predict_Covid_RF(img_file):
     'function to take image and return prediction'
-    test_image = cv2.imdecode(np.fromstring(img_file.read(), np.uint8), cv2.IMREAD_UNCHANGED)
-    test_image = cv2.cvtColor(test_image, cv2.IMREAD_GRAYSCALE)
+    #test_image = cv2.imdecode(np.fromstring(img_file.read(), np.uint8), cv2.IMREAD_UNCHANGED)
+    test_image = cv2.cvtColor(img_file, cv2.IMREAD_GRAYSCALE)
     test_image = cv2.resize(test_image, (224, 224))
     test_img = test_image.flatten().reshape(1, -1)
     
@@ -57,8 +57,8 @@ def predict_Covid_RF(img_file):
 LR_list = []
 def predict_Covid_LR(img_file):
     'function to take image and return prediction'
-    test_image = cv2.imdecode(np.fromstring(img_file.read(), np.uint8), cv2.IMREAD_UNCHANGED)
-    test_image = cv2.cvtColor(test_image, cv2.IMREAD_GRAYSCALE)
+   # test_image = cv2.imdecode(np.fromstring(img_file.read(), np.uint8), cv2.IMREAD_UNCHANGED)
+    test_image = cv2.cvtColor(img_file, cv2.IMREAD_GRAYSCALE)
     test_image = cv2.resize(test_image, (224, 224))
     test_img = test_image.flatten().reshape(1, -1)
     
@@ -71,16 +71,17 @@ def predict_Covid_LR(img_file):
     return (LR_list)
 
 def iload(filename):
-    np_image = Image.open(filename)
-    np_image = np.array(np_image).astype('float32')/255
+   # np_image = Image.open(filename)
+    np_image = np.array(filename).astype('float32')/255
     np_image = transform.resize(np_image, (150, 150, 3))
     np_image = np.expand_dims(np_image, axis=0)
     return np_image
 
 
 def pneumonia_CNN(img_file): 
-    iload(img_file)
-    image = iload(img_file)
+  #  iload(img_file)
+  #  image = iload(img_file)
+    image = img_file
     pred_pnemonia = (1-reconstructed_model.predict(image))
     if reconstructed_model.predict(image) <0.5: 
         out_pneu= 'normal'
@@ -92,8 +93,8 @@ def pneumonia_CNN(img_file):
 SVM_list = []
 def predict_Covid_SVM(img_file):
     'function to take image and return prediction'
-    test_image = cv2.imdecode(np.fromstring(img_file.read(), np.uint8), cv2.IMREAD_UNCHANGED)
-    test_image = cv2.cvtColor(test_image, cv2.IMREAD_GRAYSCALE)
+    #test_image = cv2.imdecode(np.fromstring(img_file.read(), np.uint8), cv2.IMREAD_UNCHANGED)
+    test_image = cv2.cvtColor(img_file, cv2.IMREAD_GRAYSCALE)
     test_image = cv2.resize(test_image, (224, 224))
     test_img = test_image.flatten().reshape(1, -1)
     
@@ -107,10 +108,11 @@ def predict_Covid_SVM(img_file):
 
 def predict_single(img_file):
     heading = ['model', 'probability', 'prediction']
-    covid_RF = predict_Covid_RF(img_file)
-    covid_LR = predict_Covid_LR(img_file)
-    covid_SVM = predict_Covid_SVM(img_file)
-    pneu = pneumonia_CNN(img_file)
+    image_copy = cv2.imdecode(np.fromstring(img_file.read(), np.uint8), cv2.IMREAD_UNCHANGED)
+    covid_RF = predict_Covid_RF(image_copy)
+    covid_LR = predict_Covid_LR(image_copy)
+    covid_SVM = predict_Covid_SVM(image_copy)
+    pneu = pneumonia_CNN(image_copy)
     out = np.vstack((heading, covid_RF, covid_LR, covid_SVM, pneu))
     return (out)
 
