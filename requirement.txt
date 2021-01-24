@@ -1,0 +1,11 @@
+flask
+tensorflow
+sklearn
+imutils
+pandas
+numpy
+opencv-python
+flask_cors 
+gunicorn
+ipython
+matplotlib
