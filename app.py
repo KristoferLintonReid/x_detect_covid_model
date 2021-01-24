@@ -41,7 +41,7 @@ reconstructed_model = keras.models.load_model('./model/keras_model')
 RF_list = []
 def predict_Covid_RF(img_file):
     'function to take image and return prediction'
-    test_image = cv2.imread(img_file)
+    test_image = cv2.imdecode(np.fromstring(img_file.read(), np.uint8), cv2.IMREAD_UNCHANGED)
     test_image = cv2.cvtColor(test_image, cv2.IMREAD_GRAYSCALE)
     test_image = cv2.resize(test_image, (224, 224))
     test_img = test_image.flatten().reshape(1, -1)
@@ -57,7 +57,7 @@ def predict_Covid_RF(img_file):
 LR_list = []
 def predict_Covid_LR(img_file):
     'function to take image and return prediction'
-    test_image = cv2.imread(img_file)
+    test_image = cv2.imdecode(np.fromstring(img_file.read(), np.uint8), cv2.IMREAD_UNCHANGED)
     test_image = cv2.cvtColor(test_image, cv2.IMREAD_GRAYSCALE)
     test_image = cv2.resize(test_image, (224, 224))
     test_img = test_image.flatten().reshape(1, -1)
@@ -92,7 +92,7 @@ def pneumonia_CNN(img_file):
 SVM_list = []
 def predict_Covid_SVM(img_file):
     'function to take image and return prediction'
-    test_image = cv2.imread(img_file)
+    test_image = cv2.imdecode(np.fromstring(img_file.read(), np.uint8), cv2.IMREAD_UNCHANGED)
     test_image = cv2.cvtColor(test_image, cv2.IMREAD_GRAYSCALE)
     test_image = cv2.resize(test_image, (224, 224))
     test_img = test_image.flatten().reshape(1, -1)
